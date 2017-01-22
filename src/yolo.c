@@ -288,6 +288,7 @@ void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
     network net = parse_network_cfg(cfgfile);
     if(weightfile){
         load_weights(&net, weightfile);
+        write_weights(&net);
     }
     detection_layer l = net.layers[net.n-1];
     set_batch_network(&net, 1);
