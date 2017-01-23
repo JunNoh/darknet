@@ -1117,7 +1117,7 @@ void write_weights_upto(network *net, int cutoff)
                 fprintf(stderr,"Writing %s\n", filename2);
                 FILE *fp2 = fopen(filename2, "w");
                 if(!fp2) file_error(filename2);
-                fprintf(fp, "%d\n", l.n); //out_channel
+                fprintf(fp2, "%d\n", l.n); //out_channel
                 int j;
                 for(j = 0; j < l.n; j++){
                     fprintf(fp2,"%f,",l.scales[j]);
