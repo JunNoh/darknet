@@ -10,6 +10,12 @@ void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward
     int b,i,j,k;
     int out_c = c/(stride*stride);
 
+    char filename[50];
+    sprintf(filename, "reorg_indices_%d_%d_%d.txt", c, out_c, forward);
+    fprintf(stderr, "Writing %s\n", filename);
+    FILE *fp = fopen(filename, "w");
+    if(!fp) file_error(filename);
+
     for(b = 0; b < batch; ++b){
         for(k = 0; k < c; ++k){
             for(j = 0; j < h; ++j){
@@ -22,10 +28,13 @@ void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward
                     int out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
                     if(forward) out[out_index] = x[in_index];
                     else out[in_index] = x[out_index];
+
+                    fprintf(fp, "%d -> %d\n", in_index, out_index);
                 }
             }
         }
     }
+    fflush(fp);
 }
 
 void flatten(float *x, int size, int layers, int batch, int forward)
