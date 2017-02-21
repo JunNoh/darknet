@@ -291,12 +291,16 @@ void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
         write_weights(&net);
     }
     detection_layer l = net.layers[net.n-1];
+    ///layer tmp_l = net.layers[0]; // XXX
+
     set_batch_network(&net, 1);
     srand(2222222);
     clock_t time;
     char buff[256];
     char *input = buff;
     int j;
+    int l_idx;
+    layer cur_l;
     float nms=.4;
     box *boxes = calloc(l.side*l.side*l.n, sizeof(box));
     float **probs = calloc(l.side*l.side*l.n, sizeof(float *));
@@ -318,6 +322,13 @@ void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
         network_predict(net, X);
         printf("%s: Predicted in %f seconds.\n", input, sec(clock()-time));
         get_detection_boxes(l, 1, 1, thresh, probs, boxes, 0);
+
+        write_input(X, net.w, net.h, 3);
+        for(l_idx=0; l_idx < net.n-1; l_idx++){
+            cur_l = net.layers[l_idx];
+            write_tensor(cur_l, l_idx);
+        }
+        //write_tensor(tmp_l);
         if (nms) do_nms_sort(boxes, probs, l.side*l.side*l.n, l.classes, nms);
         //draw_detections(im, l.side*l.side*l.n, thresh, boxes, probs, voc_names, alphabet, 20);
         draw_detections(im, l.side*l.side*l.n, thresh, boxes, probs, voc_names, alphabet, 20);

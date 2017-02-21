@@ -1243,3 +1243,43 @@ void write_weights(network *net)
 {
     write_weights_upto(net, net->n);
 }
+
+void write_tensor(layer l, int idx)
+{
+    int i;
+    char filename[50];
+    sprintf(filename, "tensors/layer_%d.txt", idx);
+    fprintf(stderr, "Writing %s\n", filename);
+    FILE *fp = fopen(filename, "w");
+    if(!fp) file_error(filename);
+
+    //printf("%d,%d,%d,%d\n", l.batch, l.out_w, l.out_h, l.out_c); // b,w,h,c
+    //int num = l.batch * l.out_w * l.out_h * l.out_c;
+    printf("%d,%d,%d\n", l.out_w, l.out_h, l.out_c); // w,h,c
+    int num = l.out_w * l.out_h * l.out_c;
+
+    for(i = 0; i < num; i++){
+        fprintf(fp, "%f\n", l.output[i]);
+    }
+    fflush(fp);
+}
+
+void write_input(float *input, int w, int h, int c)
+{
+    int i;
+    char filename[50];
+    sprintf(filename, "tensors/input.txt");
+    fprintf(stderr, "Writing %s\n", filename);
+    FILE *fp = fopen(filename, "w");
+    if(!fp) file_error(filename);
+
+    //printf("%d,%d,%d,%d\n", l.batch, l.out_w, l.out_h, l.out_c); // b,w,h,c
+    //int num = l.batch * l.out_w * l.out_h * l.out_c;
+    printf("%d,%d,%d\n", w, h, c); // w,h,c
+    int num = w * h * c;
+
+    for(i = 0; i < num; i++){
+        fprintf(fp, "%f\n", input[i]);
+    }
+    fflush(fp);
+}
