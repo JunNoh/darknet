@@ -326,7 +326,7 @@ void test_yolo(char *cfgfile, char *weightfile, char *filename, float thresh)
         write_input(X, net.w, net.h, 3);
         for(l_idx=0; l_idx < net.n-1; l_idx++){
             cur_l = net.layers[l_idx];
-            write_tensor(cur_l, l_idx);
+            write_tensor(cur_l, l_idx, 0);
         }
         //write_tensor(tmp_l);
         if (nms) do_nms_sort(boxes, probs, l.side*l.side*l.n, l.classes, nms);

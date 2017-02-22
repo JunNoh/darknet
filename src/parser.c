@@ -1105,7 +1105,6 @@ void write_weights_upto(network *net, int cutoff)
                 fprintf(fp,"%f\n",l.biases[j]);
             }
             fflush(fp);
-
             //Batch Normalization
             if (l.batch_normalize && (!l.dontloadscales)){
                 //fread(l.scales, sizeof(float), l.n, fp);
@@ -1244,11 +1243,15 @@ void write_weights(network *net)
     write_weights_upto(net, net->n);
 }
 
-void write_tensor(layer l, int idx)
+void write_tensor(layer l, int idx, int tag)
 {
     int i;
     char filename[50];
-    sprintf(filename, "tensors/layer_%d.txt", idx);
+    if(tag==0){
+        sprintf(filename, "tensors/layer_%d.txt", idx);
+    }else{
+        sprintf(filename, "tensors/layer_%d_%d.txt", idx, tag);
+    }
     fprintf(stderr, "Writing %s\n", filename);
     FILE *fp = fopen(filename, "w");
     if(!fp) file_error(filename);

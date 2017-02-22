@@ -485,7 +485,7 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         write_input(X, net.w, net.h, 3);
         for(l_idx=0; l_idx < net.n-1; l_idx++){
             cur_l = net.layers[l_idx];
-            write_tensor(cur_l, l_idx);
+            write_tensor(cur_l, l_idx, 0);
         }
 
         if (l.softmax_tree && nms) do_nms_obj(boxes, probs, l.w*l.h*l.n, l.classes, nms);
